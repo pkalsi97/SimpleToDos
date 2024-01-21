@@ -35,7 +35,7 @@ public class SecurityConfig {
                 // Authorise authentication for HTTP request
                 .authorizeHttpRequests(auth -> auth
                         // if matches these -> permit them without login else request must be authenticated
-                        .requestMatchers("/register","/","/authenticate","/api/myfiles/**").permitAll()
+                        .requestMatchers("/register","/","/authenticate","/api/v1/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -46,7 +46,7 @@ public class SecurityConfig {
                 )
                 // csrf is enabled for all request expect Restfull request.
                 .csrf(csrf ->
-                        csrf.ignoringRequestMatchers("/api/myfiles/**","/authenticate")
+                        csrf.ignoringRequestMatchers("/api/v1/**","/authenticate")
                 )
                 // specify user details used for authentication
                 .userDetailsService(userDetailsService)

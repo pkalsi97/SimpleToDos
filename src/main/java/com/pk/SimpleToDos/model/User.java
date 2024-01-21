@@ -3,6 +3,8 @@ package com.pk.SimpleToDos.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,5 +26,9 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskLists> taskLists;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tasks> tasks;
 }
