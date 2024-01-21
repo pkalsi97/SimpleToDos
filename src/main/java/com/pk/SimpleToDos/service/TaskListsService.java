@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 import static com.pk.SimpleToDos.exception.AppErrors.*;
 import static com.pk.SimpleToDos.exception.ErrorMessages.*;
 
+/**
+ * Service class handling business logic for task list operations.
+ * Provides methods for creating, updating, retrieving, and deleting task lists.
+ */
 @Service
 public class TaskListsService {
 
@@ -45,6 +49,16 @@ public class TaskListsService {
     @Autowired
     private GetTaskListsValidator getTaskListsValidator;
 
+    /**
+     * Creates a new task list based on the request and username.
+     * Validates the request, fetches the user, and saves the new task list to the database.
+     *
+     * @param request The request containing the task list details.
+     * @param username The username of the user creating the task list.
+     * @return The response containing the details of the created task list.
+     * @throws AppException If validation fails or user is not found.
+     */
+
     public TaskListResponse createTaskList(CreateTaskListRequest request, String username) throws AppException {
         createTaskListsValidator.validate(request);
         User user = userRepository.findUsername(username)
@@ -64,6 +78,16 @@ public class TaskListsService {
         return convertToTaskListResponse(savedTaskList);
     }
 
+    /**
+     * Updates an existing task list based on the request and username.
+     * Validates the request, fetches the user, fetches the existing task list, and updates it in the database.
+     *
+     * @param request The request containing the updated task list details.
+     * @param username The username of the user updating the task list.
+     * @return The response containing the details of the updated task list.
+     * @throws AppException If validation fails, user or task list is not found.
+     */
+
     public TaskListResponse updateTaskList(UpdateTaskListRequest request, String username) throws AppException {
         updateTaskListsValidator.validate(request);
         User user = userRepository.findUsername(username)
@@ -80,6 +104,16 @@ public class TaskListsService {
         return convertToTaskListResponse(updatedTaskList);
     }
 
+    /**
+     * Retrieves a specific task list based on its UUID and the username.
+     * Validates the UUID, fetches the user, and retrieves the task list from the database.
+     *
+     * @param taskListUuid The UUID of the task list to retrieve.
+     * @param username The username of the user requesting the task list.
+     * @return The response containing the requested task list details.
+     * @throws AppException If validation fails, user or task list is not found.
+     */
+
     public TaskListResponse getTaskList(String taskListUuid, String username) throws AppException {
         getTaskListsValidator.validate(taskListUuid);
         User user = userRepository.findUsername(username)
@@ -90,7 +124,14 @@ public class TaskListsService {
 
         return convertToTaskListResponse(taskList);
     }
-
+    /**
+     * Retrieves all task lists associated with a given username.
+     * Fetches the user and retrieves all their task lists from the database.
+     *
+     * @param username The username of the user whose task lists are to be retrieved.
+     * @return A list of responses containing the details of all task lists associated with the user.
+     * @throws AppException If the user is not found.
+     */
     public List<TaskListResponse> getAllTaskLists(String username) throws AppException {
         User user = userRepository.findUsername(username)
                 .orElseThrow(() -> new AppException("User not found", USER_NOT_FOUND));
@@ -100,6 +141,15 @@ public class TaskListsService {
                 .map(this::convertToTaskListResponse)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Deletes a specific task list based on its UUID and the username.
+     * Validates the UUID, fetches the user, and marks the task list as deleted in the database.
+     *
+     * @param taskListUuid The UUID of the task list to delete.
+     * @param username The username of the user requesting the deletion.
+     * @throws AppException If validation fails, user or task list is not found.
+     */
 
     public void deleteTaskList(String taskListUuid, String username) throws AppException {
         getTaskListsValidator.validate(taskListUuid);

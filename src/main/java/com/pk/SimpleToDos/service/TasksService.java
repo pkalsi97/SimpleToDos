@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 import static com.pk.SimpleToDos.exception.AppErrors.RESOURCE_NOT_FOUND;
 import static com.pk.SimpleToDos.exception.AppErrors.USER_NOT_FOUND;
 
+/**
+ * Service class handling business logic for task operations.
+ * Provides methods for creating, updating, retrieving, and deleting tasks.
+ */
 @Service
 public class TasksService {
 
@@ -48,6 +52,14 @@ public class TasksService {
     @Autowired
     private UpdateTaskValidator updateTaskValidator;
 
+    /**
+     * Create a new task for a given task list.
+     *
+     * @param request  The request containing task details.
+     * @param username The username of the user creating the task.
+     * @return A TaskResponse containing the created task details.
+     * @throws AppException If validation fails or user/task list not found.
+     */
     public TaskResponse createTask(CreateTaskRequest request, String username) throws AppException {
         createTaskValidator.validate(request);
 
@@ -71,6 +83,14 @@ public class TasksService {
         return convertToTaskResponse(savedTask);
     }
 
+    /**
+     * Get details of a specific task.
+     *
+     * @param taskUuid The UUID of the task to retrieve.
+     * @param username The username of the user retrieving the task.
+     * @return A TaskResponse containing the task details.
+     * @throws AppException If validation fails or the task is not found.
+     */
     public TaskResponse getTask(String taskUuid, String username) throws AppException {
         getTaskValidator.validate(taskUuid);
 
@@ -83,6 +103,13 @@ public class TasksService {
         return convertToTaskResponse(task);
     }
 
+    /**
+     * Delete a specific task.
+     *
+     * @param taskUuid The UUID of the task to delete.
+     * @param username The username of the user deleting the task.
+     * @throws AppException If validation fails or the task is not found.
+     */
     public void deleteTask(String taskUuid, String username) throws AppException {
         getTaskValidator.validate(taskUuid);
 
@@ -97,6 +124,14 @@ public class TasksService {
         tasksRepository.save(task);
     }
 
+    /**
+     * Get all tasks for a specific task list.
+     *
+     * @param taskListUuid The UUID of the task list.
+     * @param username     The username of the user retrieving tasks.
+     * @return A list of TaskResponse containing task details.
+     * @throws AppException If validation fails.
+     */
     public List<TaskResponse> getTasks(String taskListUuid, String username) throws AppException {
         getTaskValidator.validate(taskListUuid);
 
@@ -108,6 +143,14 @@ public class TasksService {
         return tasks.stream().map(this::convertToTaskResponse).collect(Collectors.toList());
     }
 
+    /**
+     * Update an existing task's details.
+     *
+     * @param updateTaskRequest The request containing updated task details.
+     * @param username          The username of the user updating the task.
+     * @return A TaskResponse containing the updated task details.
+     * @throws AppException If validation fails or the task is not found.
+     */
     public TaskResponse updateTask(UpdateTaskRequest updateTaskRequest, String username) throws AppException {
         updateTaskValidator.validate(updateTaskRequest);
 
@@ -129,6 +172,13 @@ public class TasksService {
         return convertToTaskResponse(task);
     }
 
+    /**
+     * Converts a Tasks entity to a TaskResponse DTO.
+     * This method is used to transform the task data for client-facing responses.
+     *
+     * @param task The Tasks entity to convert.
+     * @return A TaskResponse containing the task details.
+     */
     private TaskResponse convertToTaskResponse(Tasks task) {
         return TaskResponse.builder()
                 .uuid(UUID.fromString(task.getUuid().toString()))

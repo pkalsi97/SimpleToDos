@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-import static com.pk.SimpleToDos.constants.ToDoAPIConstants.*;
+import static com.pk.SimpleToDos.constants.APIConstants.*;
 import static com.pk.SimpleToDos.exception.ErrorMessages.*;
 
 @Component

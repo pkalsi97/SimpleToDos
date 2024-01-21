@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 
-import static com.pk.SimpleToDos.constants.ToDoAPIConstants.*;
+import static com.pk.SimpleToDos.constants.APIConstants.*;
 import static com.pk.SimpleToDos.exception.ErrorMessages.*;
 
 @Component

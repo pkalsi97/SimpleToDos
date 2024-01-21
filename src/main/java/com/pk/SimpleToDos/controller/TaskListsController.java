@@ -12,16 +12,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-import static com.pk.SimpleToDos.constants.ToDoAPIConstants.*;
+import static com.pk.SimpleToDos.constants.APIConstants.*;
 
+/**
+ * Controller for handling task list related requests.
+ * Provides endpoints for creating, updating, retrieving, and deleting task lists.
+ */
 @RestController
 public class TaskListsController {
 
+    // Logger for this class
     private static final Logger log = LoggerFactory.getLogger(TaskListsController.class);
 
+    // Service layer dependency for task list operations
     @Autowired
     private TaskListsService taskListsService;
 
+    /**
+     * Endpoint to create a new task list.
+     * @param createTaskListRequest Request body containing task list details
+     * @param principal Authenticated user's principal
+     * @return Created task list response
+     * @throws AppException If any application-specific exception occurs
+     */
     @PostMapping(API + "/" + VERSION_1 + "/" + TASKLISTS_ENDPOINT)
     public TaskListResponse createTaskList(@RequestBody CreateTaskListRequest createTaskListRequest, Principal principal) throws AppException {
         try {
@@ -33,6 +46,13 @@ public class TaskListsController {
         }
     }
 
+    /**
+     * Endpoint to update an existing task list.
+     * @param updateTaskListRequest Request body containing updated task list details
+     * @param principal Authenticated user's principal
+     * @return Updated task list response
+     * @throws AppException If any application-specific exception occurs
+     */
     @PutMapping(API + "/" + VERSION_1 + "/" + TASKLISTS_ENDPOINT)
     public TaskListResponse updateTaskList(@RequestBody UpdateTaskListRequest updateTaskListRequest, Principal principal) throws AppException {
         try {
@@ -44,6 +64,13 @@ public class TaskListsController {
         }
     }
 
+    /**
+     * Endpoint to retrieve a specific task list by its UUID.
+     * @param taskListUuid The UUID of the task list
+     * @param principal Authenticated user's principal
+     * @return The requested task list response
+     * @throws AppException If any application-specific exception occurs
+     */
     @GetMapping(API + "/" + VERSION_1 + "/" + TASKLISTS_ENDPOINT + "/" + "{task_list_uuid}")
     public TaskListResponse getTaskList(@PathVariable("task_list_uuid") String taskListUuid, Principal principal) throws AppException {
         try {
@@ -55,6 +82,12 @@ public class TaskListsController {
         }
     }
 
+    /**
+     * Endpoint to delete a specific task list by its UUID.
+     * @param taskListUuid The UUID of the task list to be deleted
+     * @param principal Authenticated user's principal
+     * @throws AppException If any application-specific exception occurs
+     */
     @DeleteMapping(API + "/" + VERSION_1 + "/" + TASKLISTS_ENDPOINT + "/" + "{task_list_uuid}")
     public void deleteTaskList(@PathVariable("task_list_uuid") String taskListUuid, Principal principal) throws AppException {
         try {
